@@ -50,8 +50,8 @@ jobs:
       - name: Install Playwright browser
         run: python -m playwright install --with-deps chromium
 
-      - name: Run tests
-        run: pytest -v --alluredir=allure-results
+      - name: Run tests with coverage
+        run: pytest -v --cov=src.calculator --cov-fail-under=100 --alluredir=allure-results
 
       - name: Upload Allure results
         if: always()
