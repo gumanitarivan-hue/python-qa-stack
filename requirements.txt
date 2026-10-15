@@ -5,3 +5,4 @@ psycopg[binary]
 selenium
 playwright
 allure-pytest
+requests
