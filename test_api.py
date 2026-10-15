@@ -57,3 +57,57 @@ def test_get_invalid_post_ids(invalid_post_id):
     )
 
     assert response.status_code == 404
+
+
+def test_create_post():
+    payload = {
+        "title": "Python QA test",
+        "body": "Testing POST request",
+        "userId": 1,
+    }
+
+    response = requests.post(
+        f"{BASE_URL}/posts",
+        json=payload,
+        timeout=10,
+    )
+
+    assert response.status_code == 201
+
+    data = response.json()
+    assert data["title"] == payload["title"]
+    assert data["body"] == payload["body"]
+    assert data["userId"] == payload["userId"]
+    assert "id" in data
+
+
+def test_update_post():
+    payload = {
+        "id": 1,
+        "title": "Updated Python QA test",
+        "body": "Testing PUT request",
+        "userId": 1,
+    }
+
+    response = requests.put(
+        f"{BASE_URL}/posts/1",
+        json=payload,
+        timeout=10,
+    )
+
+    assert response.status_code == 200
+
+    data = response.json()
+    assert data["id"] == 1
+    assert data["title"] == payload["title"]
+    assert data["body"] == payload["body"]
+    assert data["userId"] == payload["userId"]
+
+
+def test_delete_post():
+    response = requests.delete(
+        f"{BASE_URL}/posts/1",
+        timeout=10,
+    )
+
+    assert response.status_code == 200
