@@ -1,0 +1,7 @@
+pytest
+pytest-cov
+ruff
+psycopg[binary]
+selenium
+playwright
+allure-pytest
