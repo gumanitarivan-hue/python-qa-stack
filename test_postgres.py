@@ -1,9 +1,11 @@
+import os
+
 import psycopg
 
 
 def test_postgres_connection():
     with psycopg.connect(
-        host="localhost",
+        host=os.getenv("POSTGRES_HOST", "localhost"),
         port=5432,
         dbname="qa_db",
         user="qa_user",

@@ -14,7 +14,14 @@ services:
       interval: 5s
       timeout: 5s
       retries: 10
-
+  tests:
+    build: .
+    environment:
+      POSTGRES_HOST: postgres
+    depends_on:
+      postgres:
+        condition: service_healthy
+        
 volumes:
   postgres_data:
     external: true

@@ -1,0 +1,11 @@
+.git
+.venv
+__pycache__
+.pytest_cache
+.coverage
+htmlcov
+allure-results
+allure-report
+.vscode
+.env
+.env.*
