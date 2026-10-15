@@ -108,4 +108,6 @@ GitHub Actions автоматически запускает проверки п
 
 ## Автор проекта
 
-Учебный проект для развития навыков QA Automation Engineer на Python. by ChubbyTim-aka-gumanitarivan
+Учебный проект для развития навыков QA Automation Engineer на Python.
+
+Автор: [ChubbyTim-aka-gumanitarivan]
