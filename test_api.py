@@ -111,3 +111,22 @@ def test_delete_post():
     )
 
     assert response.status_code == 200
+
+
+def test_patch_post():
+    payload = {
+        "title": "Partially updated Python QA test",
+    }
+
+    response = requests.patch(
+        f"{BASE_URL}/posts/1",
+        json=payload,
+        timeout=10,
+    )
+
+    assert response.status_code == 200
+
+    data = response.json()
+    assert data["id"] == 1
+    assert data["title"] == payload["title"]
+    assert data["userId"] == 1
