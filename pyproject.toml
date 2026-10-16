@@ -1,7 +1,8 @@
 [tool.pytest.ini_options]
 pythonpath = ["."]
 testpaths = ["tests"]
-addopts = "-v --alluredir=allure-results"
+base_url = "https://www.saucedemo.com"
+addopts = "-v --alluredir=allure-results --tracing=retain-on-failure --screenshot=only-on-failure"
 markers = [
     "api: API tests",
     "ui: browser tests",
