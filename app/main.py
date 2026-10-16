@@ -74,9 +74,7 @@ def create_user(user: UserIn, conn=Depends(get_conn)):
 
 @app.get("/users/{user_id}", response_model=UserOut)
 def get_user(user_id: int, conn=Depends(get_conn)):
-    row = conn.execute(
-        "SELECT id, email, name FROM users WHERE id = %s", (user_id,)
-    ).fetchone()
+    row = conn.execute("SELECT id, email, name FROM users WHERE id = %s", (user_id,)).fetchone()
     if row is None:
         raise HTTPException(status_code=404, detail="User not found")
     return row
@@ -86,8 +84,7 @@ def get_user(user_id: int, conn=Depends(get_conn)):
 def create_order(order: OrderIn, conn=Depends(get_conn)):
     try:
         row = conn.execute(
-            "INSERT INTO orders (user_id, amount) VALUES (%s, %s) "
-            "RETURNING id, user_id, amount",
+            "INSERT INTO orders (user_id, amount) VALUES (%s, %s) RETURNING id, user_id, amount",
             (order.user_id, order.amount),
         ).fetchone()
     except ForeignKeyViolation:
@@ -117,9 +114,7 @@ def list_user_orders(user_id: int, conn=Depends(get_conn)):
 
 @app.delete("/orders/{order_id}", status_code=204)
 def delete_order(order_id: int, conn=Depends(get_conn)):
-    row = conn.execute(
-        "DELETE FROM orders WHERE id = %s RETURNING id", (order_id,)
-    ).fetchone()
+    row = conn.execute("DELETE FROM orders WHERE id = %s RETURNING id", (order_id,)).fetchone()
     if row is None:
         raise HTTPException(status_code=404, detail="Order not found")
     return Response(status_code=204)

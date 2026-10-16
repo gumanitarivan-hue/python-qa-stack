@@ -5,3 +5,4 @@ pytest
 pytest-playwright
 allure-pytest
 ruff
+pydantic-settings
