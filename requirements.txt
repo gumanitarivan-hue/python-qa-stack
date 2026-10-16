@@ -1,8 +1,8 @@
-pytest
-pytest-cov
-ruff
-psycopg[binary]
-selenium
-playwright
-allure-pytest
 requests
+pydantic
+pydantic-settings
+psycopg[binary]
+pytest
+pytest-playwright
+allure-pytest
+ruff

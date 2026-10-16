@@ -1,0 +1,17 @@
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]
+base_url = "https://www.saucedemo.com"
+addopts = "-v --alluredir=allure-results --tracing=retain-on-failure --screenshot=only-on-failure"
+markers = [
+    "api: API tests",
+    "ui: browser tests",
+    "db: database tests",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I"]
