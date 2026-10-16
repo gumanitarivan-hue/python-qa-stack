@@ -1,8 +1,8 @@
 requests
 pydantic
+pydantic-settings
 psycopg[binary]
 pytest
 pytest-playwright
 allure-pytest
 ruff
-pydantic-settings

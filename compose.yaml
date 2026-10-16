@@ -34,3 +34,21 @@ services:
       timeout: 5s
       retries: 10
       start_period: 5s
+
+  tests:
+    build: .
+    profiles: ["tests"]
+    shm_size: "1gb"
+    environment:
+      APP_URL: http://app:8000
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    depends_on:
+      app:
+        condition: service_healthy
+    volumes:
+      - ./allure-results:/app/allure-results
+      - ./test-results:/app/test-results
