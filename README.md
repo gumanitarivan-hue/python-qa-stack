@@ -73,6 +73,13 @@ GitHub Actions при каждом пуше и pull request:
    параллельно, сохраняет результаты и трейсы упавших тестов.
 3. **Allure report:** собирает отчёт; для ветки `main` публикует его на GitHub Pages.
 
+### Jenkins (локально)
+
+В репозитории есть `Jenkinsfile` (стадии Lint и Tests) и конфигурация для
+локального запуска Jenkins в Docker:
+`docker compose -f jenkins/compose.yaml up -d --build`.
+Основной CI проекта: GitHub Actions. Jenkins запускается вручную.
+
 ## Ключевые решения
 
 - **Независимые тесты.** Каждый тест создаёт данные с уникальным email,
@@ -96,5 +103,5 @@ saucedemo.com и JSONPlaceholder сторонние, поэтому при их 
 
 ## Автор
 
-ChubbyTim.
+Тимур Б-aka-ChubbyTim-akagumanitarivan.
 Контакты: tg:@ragazzomisterioso
