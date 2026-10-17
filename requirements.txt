@@ -6,3 +6,6 @@ pytest
 pytest-playwright
 allure-pytest
 ruff
+pytest-xdist
+pytest-rerunfailures
+pre-commit
