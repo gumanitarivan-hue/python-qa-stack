@@ -1,113 +1,100 @@
 # Python QA Automation Stack
 
-Учебный pet-проект по автоматизации тестирования на Python. Демонстрирует тестирование REST API, браузерную автоматизацию, проверку базы данных, контроль качества кода и CI.
+[![Tests](https://github.com/gumanitarivan-hue/python-qa-stack/actions/workflows/tests.yml/badge.svg)](https://github.com/gumanitarivan-hue/python-qa-stack/actions/workflows/tests.yml)
+[![Allure report](https://img.shields.io/badge/Allure-report-blueviolet)](https://gumanitarivan-hue.github.io/python-qa-stack/)
 
-## Технологический стек
+Демонстрационный проект по автоматизации тестирования на Python: тестируемое
+приложение (пользователи и заказы), три слоя автотестов (API, БД, UI),
+запуск в Docker и CI с публикацией Allure-отчёта.
 
-- **Python 3.12** — язык программирования
-- **Pytest** — запуск и организация тестов
-- **Requests** — тестирование REST API
-- **Playwright** — браузерная автоматизация
-- **Selenium** — браузерная автоматизация
-- **PostgreSQL** — проверка базы данных
-- **Docker и Docker Compose** — запуск тестов в контейнерах
-- **Ruff** — проверка качества кода
-- **Allure** — подготовка отчётов о тестировании
-- **GitHub Actions** — автоматический запуск проверок в CI
+**[Последний Allure-отчёт](https://gumanitarivan-hue.github.io/python-qa-stack/)**
 
-## Что тестируется
+## Что внутри
 
-### REST API
+| Слой | Что проверяется | Инструменты |
+|------|-----------------|-------------|
+| API | CRUD, валидация (422), дубликаты (409), связи между сущностями, схемы ответов | requests, pydantic |
+| БД | UNIQUE, NOT NULL, FOREIGN KEY, CHECK, JOIN; запись через API видна в БД | psycopg, SQL |
+| UI | вход, каталог, сортировка, корзина, оформление заказа (Page Object) | Playwright |
 
-Автоматизированные тесты для API JSONPlaceholder:
+Более 70 тестов. Тестируемое приложение (`app/`) написано на FastAPI и хранит
+данные в PostgreSQL. UI-тесты идут по демо-магазину saucedemo.com, а набор
+тестов на публичный JSONPlaceholder показывает работу с внешним API.
 
-- **GET** — получение одной записи и списка записей
-- **POST** — создание записи
-- **PUT** — полное обновление записи
-- **PATCH** — частичное обновление записи
-- **DELETE** — удаление записи
-- Проверка HTTP-статусов и содержимого ответов
-- Параметризованные тесты для корректных и некорректных ID
+## Структура проекта
 
-> JSONPlaceholder — демонстрационный API. Операции создания, изменения и удаления имитируются и не сохраняются на сервере.
+```
+app/                 тестируемое приложение (FastAPI + PostgreSQL)
+db/init.sql          схема БД, создаётся при старте контейнера
+src/
+  api/               HTTP-клиент и pydantic-модели ответов
+  pages/             Page Object для UI
+  config.py          настройки из переменных окружения / .env
+tests/
+  api/  db/  ui/     тесты по слоям
+  conftest.py        общие фикстуры
+.github/workflows/   CI
+compose.yaml         приложение + БД + контейнер с тестами
+```
 
-### Браузерная автоматизация
+## Запуск локально
 
-- Открытие веб-сайта с помощью Playwright
-- Открытие веб-сайта с помощью Selenium
-
-### Тестирование базы данных
-
-- Проверка подключения к PostgreSQL
-- Выполнение SQL-запроса
-- Проверка результата запроса
-
-### Модульные тесты
-
-- Сложение чисел
-- Деление чисел
-- Обработка деления на ноль
-
-## Как запустить тесты локально
-
-Создать виртуальное окружение:
+Нужны Python 3.12+ и Docker.
 
 ```powershell
 python -m venv .venv
-```
-
-Активировать его в Windows PowerShell:
-
-```powershell
-.\.venv\Scripts\Activate.ps1
-```
-
-Установить зависимости:
-
-```powershell
+.\.venv\Scripts\Activate.ps1          # Linux/macOS: source .venv/bin/activate
 pip install -r requirements.txt
+python -m playwright install chromium
+Copy-Item .env.example .env           # Linux/macOS: cp .env.example .env
+docker compose up -d --build --wait   # приложение и БД
+pytest
 ```
 
-Запустить все тесты:
+Часть тестов по маркерам: `pytest -m api`, `pytest -m db`, `pytest -m ui`.
+Параллельно: `pytest -n 2`.
 
-```powershell
-pytest -v
-```
-
-Запустить только API-тесты:
-
-```powershell
-pytest test_api.py -v
-```
-
-Проверить качество кода:
-
-```powershell
-ruff check .
-```
-
-## Запуск через Docker
+## Запуск в Docker
 
 ```powershell
 docker compose run --build --rm tests
+docker compose down -v
 ```
 
-## Непрерывная интеграция (CI)
+Результаты (`allure-results/`, трейсы упавших UI-тестов в `test-results/`)
+сохраняются на диск.
 
-GitHub Actions автоматически запускает проверки при отправке изменений в репозиторий.
+## CI
 
-## Цели проекта
+GitHub Actions при каждом пуше и pull request:
 
-- Практика автоматизации тестирования на Python
-- Тестирование REST API и HTTP-методов
-- Работа с Pytest и параметризацией
-- Браузерная автоматизация
-- Проверка базы данных с помощью SQL
-- Запуск тестов в Docker
-- Настройка CI через GitHub Actions
+1. **Lint:** `ruff check` и `ruff format --check`.
+2. **Tests:** поднимает приложение и БД через Docker Compose, запускает все тесты
+   параллельно, сохраняет результаты и трейсы упавших тестов.
+3. **Allure report:** собирает отчёт; для ветки `main` публикует его на GitHub Pages.
 
-## Автор проекта
+## Ключевые решения
 
-Учебный проект для развития навыков QA Automation Engineer на Python.
+- **Независимые тесты.** Каждый тест создаёт данные с уникальным email,
+  поэтому базу не нужно чистить и тесты можно запускать параллельно.
+- **Page Object и фикстуры.** Локаторы и шаги живут в `src/pages/`, настройка
+  состояния (логин, корзина) в фикстурах, а в самих тестах остаётся сценарий.
+- **Схемы ответов** проверяются через pydantic, поэтому лишнее или пропавшее
+  поле ловится сразу.
+- **Повторы** (`pytest-rerunfailures`) включены только для тестов, зависящих от
+  внешних сайтов (UI и JSONPlaceholder). Тесты собственного приложения не
+  перезапускаются, чтобы не скрывать реальные дефекты.
+- **Секреты** не хранятся в коде: настройки идут через `.env` (в git только
+  `.env.example`).
 
-Автор: [ChubbyTim-aka-gumanitarivan]
+## Упрощения
+
+Приложение демонстрационное: нет авторизации, а сумма заказа хранится как
+`float` (в реальной системе нужен `Decimal` или целые копейки). Сайты
+saucedemo.com и JSONPlaceholder сторонние, поэтому при их сбоях возможны
+ложные падения.
+
+## Автор
+
+ChubbyTim.
+Контакты: tg:@ragazzomisterioso

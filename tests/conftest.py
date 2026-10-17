@@ -49,3 +49,10 @@ def created_user(shop_api, unique_email):
     response = shop_api.post("/users", json={"email": unique_email, "name": "Test User"})
     assert response.status_code == 201
     return response.json()
+
+
+def pytest_collection_modifyitems(items):
+    """Повторяем только тесты, зависящие от внешних сайтов (UI и JSONPlaceholder)."""
+    for item in items:
+        if item.get_closest_marker("ui") or "api" in item.fixturenames:
+            item.add_marker(pytest.mark.flaky(reruns=2, reruns_delay=1))
