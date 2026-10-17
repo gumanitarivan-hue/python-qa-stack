@@ -1,0 +1,5 @@
+services:
+  tests:
+    volumes:
+      - ./allure-results:/app/allure-results
+      - ./test-results:/app/test-results
