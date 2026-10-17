@@ -4,7 +4,7 @@ import os
 from collections.abc import Iterator
 
 import psycopg
-from FastApi import Depends, FastAPI, HTTPException, Response
+from fastapi import Depends, FastAPI, HTTPException, Response
 from psycopg.errors import ForeignKeyViolation, UniqueViolation
 from psycopg.rows import dict_row
 from pydantic import BaseModel, EmailStr, Field
